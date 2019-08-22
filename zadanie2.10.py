@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 import sys
 
-data = sys.stdin.readlines()
-print('Naliczyłem', len(''.join(data).split()), 'wyrazów.')
+def count_words(line):
+    return len(line.split())
+
+data = ''.join(sys.stdin.readlines())
+print('Wyzrazy:', count_words(data))
