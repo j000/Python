@@ -5,4 +5,4 @@ def count_words(line):
     return len(line.split())
 
 data = ''.join(sys.stdin.readlines())
-print('Wyzrazy:', count_words(data))
+print('Wyrazy:', count_words(data))
