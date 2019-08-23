@@ -14,6 +14,15 @@ if __name__ == '__main__':
     assert 2 == count_words('test  \ntest')
     assert 2 == count_words('test \n test')
     assert 2 == count_words('test\n  test')
-    # policz wyrazy na standardowym wejściu
-    data = sys.stdin.read()
-    print('Wyrazy:', count_words(data))
+    # policz wyrazy
+    if len(sys.argv) > 1:
+        # w podanych plikach
+        for filename in sys.argv[1:]:
+            with open(filename) as f:
+                # print(filename, ':', count_words(f.read()))
+                print('{}: Wyrazy: {}'.format(filename, count_words(f.read())))
+                f.close()
+    else:
+        # na standardowym wejściu
+        data = sys.stdin.read()
+        print('Wyrazy:', count_words(data))
