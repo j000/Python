@@ -19,8 +19,7 @@ if __name__ == '__main__':
         # w podanych plikach
         for filename in sys.argv[1:]:
             with open(filename) as f:
-                # print(filename, ':', count_words(f.read()))
-                print('{}: Wyrazy: {}'.format(filename, count_words(f.read())))
+                print(f'{filename}: Wyrazy:', count_words(f.read()))
                 f.close()
     else:
         # na standardowym wejściu
