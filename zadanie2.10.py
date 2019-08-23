@@ -15,5 +15,5 @@ if __name__ == '__main__':
     assert 2 == count_words('test \n test')
     assert 2 == count_words('test\n  test')
     # policz wyrazy na standardowym wejściu
-    data = ''.join(sys.stdin.readlines())
+    data = sys.stdin.read()
     print('Wyrazy:', count_words(data))
