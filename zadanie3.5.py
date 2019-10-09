@@ -11,8 +11,8 @@ def get_number():
             return number
 
 rozmiar = get_number()
-out = '|' + '---|' * rozmiar + "\n" + str(0)
-for i in range(1, rozmiar+1):
-    out += str(i).rjust(4)
+out = '|' + '....|' * rozmiar + "\n" + str(0)
+for i in range(rozmiar):
+    out += str(i + 1).rjust(5)
 
 print(out)
