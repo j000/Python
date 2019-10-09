@@ -10,12 +10,15 @@ def get_number(prompt='Podaj liczbę'):
         else:
             return number
 
+drawing_chars = ('+-', '| ')
+window_size = (3, 1)
+
 width = get_number('Podaj szerokość')
 height = get_number('Podaj wysokość')
 
-edge = '+' + width * (3 * '-' + '+')
-middle = '|' + width * (3 * ' ' + '|')
+edge = drawing_chars[0][0] + width * (window_size[0] * drawing_chars[0][1] + drawing_chars[0][0])
+middle = drawing_chars[1][0] + width * (window_size[0] * drawing_chars[1][1] + drawing_chars[1][0])
 
-out = edge + ("\n" + middle + "\n" + edge) * height
+out = edge + (window_size[1] * ('\n' + middle) + '\n' + edge) * height
 
 print(out)
