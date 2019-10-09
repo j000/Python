@@ -21,9 +21,5 @@ def roman2int(input):
             out += numerals[input[i]]
     return out
 
-print(roman2int('I'))
-print(roman2int('II'))
-print(roman2int('XL'))
-print(roman2int('MCMLXXXVII'))
-print(roman2int('MMMCMLXXXVI'))
-print(roman2int('MMMM'))
+for i in ('I', 'II', 'XL', 'MCMLXXXVII', 'MMMCMLXXXVI', 'MMMM'):
+    print(i, ':', roman2int(i))
