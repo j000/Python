@@ -1,19 +1,31 @@
 #!/usr/bin/env python3
+"""
+zadanie 2.19
+"""
 import sys
 import random
 
 def fun(list):
-    return map(
-        lambda x: str.zfill(str(x), 3),
-        list
-    )
+    """
+    Returns string made of numbers from list.
+    >>> fun([1])
+    '001'
+    >>> fun([1, 2])
+    '001002'
+    """
+    return ''.join(
+        map(
+            lambda x: str.zfill(str(x), 3),
+            list
+            )
+        )
 
 if __name__ == '__main__':
-    print(
-        ', '.join(
-            fun(
-                [
-                    random.randint(0,999) for _ in range(random.randint(10,20))
-                ]
-            )
-        ))
+    # testy
+    import doctest
+    doctest.testmod()
+
+    tmp = [
+        random.randint(0,999) for _ in range(random.randint(10,20))
+    ]
+    print(f'{tmp} => \n{fun(tmp)}')
