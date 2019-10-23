@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+zadanie 3.10
+"""
 
 numerals = {
         'I': 1,
@@ -21,5 +25,6 @@ def roman2int(input):
             out += numerals[input[i]]
     return out
 
-for i in ('I', 'II', 'XL', 'MCMLXXXVII', 'MMMCMLXXXVI', 'MMMM'):
-    print(i, ':', roman2int(i))
+if __name__ == '__main__':
+    for i in ('I', 'II', 'XL', 'MCMLXXXVII', 'MMMCMLXXXVI', 'MMMM'):
+        print(i, ':', roman2int(i))

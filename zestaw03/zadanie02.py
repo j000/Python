@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 L = [3, 5, 4] ; L = L.sort()
 ## okej

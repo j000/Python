@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+zadanie 3.5
+"""
 
 def get_number():
     while True:
@@ -10,9 +14,12 @@ def get_number():
         else:
             return number
 
-rozmiar = get_number()
-out = '|' + '....|' * rozmiar + "\n" + str(0)
-for i in range(rozmiar):
-    out += str(i + 1).rjust(5)
+def miarka(rozmiar):
+    out = '|' + '....|' * rozmiar + "\n" + str(0)
+    for i in range(rozmiar):
+        out += str(i + 1).rjust(5)
+    return out
 
-print(out)
+if __name__ == '__main__':
+    rozmiar = get_number()
+    print(miarka(rozmiar))
