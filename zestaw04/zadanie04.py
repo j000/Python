@@ -26,11 +26,12 @@ def fibonacci(input):
     2
     >>> fibonacci(6)
     8
+    >>> fibonacci(14)
+    377
     """
-    input -= 1
     x = 1
-    y = 1
-    while input > 1:
+    y = 0
+    while input > 0:
         x = x + y
         x, y = y, x
         input -= 1
