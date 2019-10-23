@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 zadanie 2.14
 """
@@ -6,7 +7,7 @@ import sys
 
 def longest_word(line):
     """
-    Returns lenght and longest word in line.
+    Returns length and longest word in line.
     >>> longest_word('test')
     (4, 'test')
     >>> longest_word('test numer dwa')

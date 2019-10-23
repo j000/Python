@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 zadanie 2.17
 """
@@ -6,7 +7,7 @@ import sys
 
 def fun(line):
     """
-    Returns sorted words from line.
+    Returns sorted words from line. First sorted alphabe:
 
     >>> fun('test')
     (['test'], ['test'])
