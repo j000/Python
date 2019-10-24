@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
+Jarosław Rymut
 zadanie 2.18
 """
 import sys

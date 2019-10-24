@@ -1,5 +1,6 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
+# Jarosław Rymut
 
 #
 x = 2 ; y = 3 ;

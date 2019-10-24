@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Jarosław Rymut
 
 L = [3, 5, 4] ; L = L.sort()
 ## okej
