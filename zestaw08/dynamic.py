@@ -38,8 +38,8 @@ def p_rec(i, j):
     return 0.5 * (p_rec(i - 1, j) + p_rec(i, j - 1))
 
 def p(i, j):
-    i = float(i)
-    j = float(j)
+    i = int(i)
+    j = int(j)
     if i <= 0 and j <= 0:
         return 0.5
     if j <= 0:
