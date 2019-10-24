@@ -6,12 +6,8 @@ PriorityQueue
 Jarosław Rymut
 """
 
-# missing from Python3
-def cmp(a, b):
-    return (a > b) - (a < b)
-
 class PriorityQueue:
-    def __init__(self, cmpfunc=cmp):
+    def __init__(self, cmpfunc=lambda x, y: x > y):
         self.queue = []
         self.cmpfunc = cmpfunc
 
