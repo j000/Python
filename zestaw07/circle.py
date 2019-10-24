@@ -3,6 +3,7 @@
 """
 zadanie 7.5
 Okręgi
+Jarosław Rymut
 """
 
 import sys

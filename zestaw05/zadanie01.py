@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 zadanie 5.1
+Jarosław Rymut
 """
 
 import sys

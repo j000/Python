@@ -3,6 +3,7 @@
 """
 zadanie 7.2
 Wielomiany
+Jarosław Rymut
 """
 
 class Poly:

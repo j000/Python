@@ -3,6 +3,7 @@
 """
 zadanie 6.2
 Punkt
+Jarosław Rymut
 """
 
 class Point:

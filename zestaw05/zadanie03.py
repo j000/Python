@@ -3,6 +3,7 @@
 """
 zadanie 5.2
 Wielomiany
+Jarosław Rymut
 """
 
 def __collapse(poly):
