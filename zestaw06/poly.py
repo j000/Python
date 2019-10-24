@@ -101,18 +101,14 @@ class Poly:
         Multiply two polynomials.
         >>> Poly([0, 0, 1]) * Poly([1, 2])
         Poly([0, 0, 1, 2])
-        """
-        """
-        >>> mul_poly([0, 0, 1], [1, 2])
-        [0, 0, 1, 2]
-        >>> mul_poly([1, 2], [4, 6])
-        [4, 14, 12]
-        >>> mul_poly([1, 2], [])
-        []
-        >>> mul_poly([1, 2, 3], [2])
-        [2, 4, 6]
-        >>> mul_poly([2], [1, 2, 3])
-        [2, 4, 6]
+        >>> Poly([1, 2]) * Poly([4, 6])
+        Poly([4, 14, 12])
+        >>> Poly([1, 2]) * Poly([])
+        Poly([])
+        >>> Poly([1, 2, 3]) * Poly([2])
+        Poly([2, 4, 6])
+        >>> Poly([2]) * Poly([1, 2, 3])
+        Poly([2, 4, 6])
         """
         out = [0] * (len(self.a) + len(other.a) - 1)
         for i in range(len(self.a)):
