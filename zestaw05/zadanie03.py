@@ -9,6 +9,11 @@ class Polynomial:
     def __init__(self, *argv):
         """
         Create polynomial.
+        Careful:
+          * 1 is Polynomial(1)
+          * x is Polynomial(1, 0)
+          * x^2 is Polynomial(1, 0, 0)
+          etc.
         """
         self.a = []
         if len(argv) < 1:
@@ -44,6 +49,8 @@ class Polynomial:
         '3x^2'
         >>> Polynomial(0, 0, 3).__str__()
         '3'
+        >>> Polynomial(42.0).__str__()
+        '42.0'
         """
         if len(self.a) == 0:
             return '0'
@@ -54,7 +61,7 @@ class Polynomial:
             tmp.append(str(self.a[1]) + 'x')
         for i in range(2, len(self.a)):
             if i != 0:
-                tmp.append(f'{self.a[i]}x^{i}')
+                tmp.append(f'{self.a[i]:g}x^{i}')
         tmp.reverse()
         return ' + '.join(tmp)
 
@@ -75,6 +82,8 @@ class Polynomial:
         Polynomial([0, 0, 0, 1])
         >>> Polynomial(0, 0, 0, 1, 0, 0, 0)
         Polynomial([0, 0, 0, 1])
+        >>> Polynomial(1.0, 0.0)
+        Polynomial([0.0, 1.0])
         """
         return f'Polynomial({self.a})';
 
@@ -143,6 +152,8 @@ class Polynomial:
         True
         >>> Polynomial(1, 2, 0, 0) + Polynomial(3, 4) == Polynomial(1, 2, 3, 4)
         True
+        >>> Polynomial(1, 0) + 1
+        Polynomial([1.0, 1])
         >>> print(Polynomial(1) + Polynomial(0, 1))
         2
         >>> print(Polynomial(1, 1) + Polynomial(1, 0))
@@ -150,14 +161,23 @@ class Polynomial:
         >>> print(Polynomial(1, 2) + Polynomial(3, 4))
         4x + 6
         """
-        l = min(len(self.a), len(other.a))
-        from operator import add
-        return Polynomial(
-            list(map(add, self.a[:l], other.a[:l]))
-            # at least one of them will be empty
-            + self.a[l:]
-            + other.a[l:]
-        )
+        if isinstance(other, Polynomial):
+            l = min(len(self.a), len(other.a))
+            from operator import add
+            return Polynomial(
+                list(map(add, self.a[:l], other.a[:l]))
+                # at least one of them will be empty
+                + self.a[l:]
+                + other.a[l:]
+            )
+        try:
+            x = float(other)
+        except ValueError:
+            raise ValueError(f'{other} is not a float.')
+        return self + Polynomial(x)
+
+    def __radd__(self, other):
+        return self + other
 
     def __neg__(self):
         """
@@ -192,14 +212,36 @@ class Polynomial:
         True
         >>> Polynomial(2, 1) * Polynomial() == Polynomial(0)
         True
+        >>> Polynomial(2, 1) * 2
+        Polynomial([2.0, 4.0])
         >>> print(Polynomial(1, 0, 1) * Polynomial(1, 1, 0))
         1x^4 + 1x^3 + 1x^2 + 1x
+        >>> Polynomial(1) * 'lol'
+        Traceback (most recent call last):
+            ...
+        ValueError: lol is not a float.
         """
-        out = [0] * (len(self.a) + len(other.a) - 1)
-        for i in range(len(self.a)):
-            for j in range(len(other.a)):
-                out[i + j] += self.a[i] * other.a[j]
+        if isinstance(other, Polynomial):
+            out = [0] * (len(self.a) + len(other.a) - 1)
+            for i in range(len(self.a)):
+                for j in range(len(other.a)):
+                    out[i + j] += self.a[i] * other.a[j]
+            return Polynomial(out)
+        try:
+            x = float(other)
+        except ValueError:
+            raise ValueError(f'{other} is not a float.')
+        out = [x * a for a in self.a]
         return Polynomial(out)
+
+    def __rmul__(self, other):
+        """
+        >>> 2 * Polynomial(2, 1)
+        Polynomial([2.0, 4.0])
+        >>> Polynomial(2, 1).__rmul__(2)
+        Polynomial([2.0, 4.0])
+        """
+        return self * other
 
     def __pow__(self, other):
         """
@@ -224,33 +266,41 @@ class Polynomial:
         True
         >>> Polynomial(3, 2, 1) ** 3 == Polynomial(27, 54, 63, 44, 21, 6, 1)
         True
+        >>> Polynomial(1) ** 'lol'
+        Traceback (most recent call last):
+            ...
+        ValueError: lol is not an integer.
         """
+        try:
+            x = int(other)
+        except ValueError:
+            raise ValueError(f'{other} is not an integer.')
         t = self
         out = Polynomial(1)
-        while other:
-            if other & 1:
+        while x:
+            if x & 1:
                 out *= t
             t *= t
-            other >>= 1
+            x >>= 1
         return out
 
-    def is_zero(self):
+    def __bool__(self):
         """
         Check if polynomial is a zero.
-        >>> Polynomial().is_zero()
-        True
-        >>> Polynomial(0).is_zero()
-        True
-        >>> Polynomial(0, 0).is_zero()
-        True
-        >>> Polynomial(1).is_zero()
+        >>> bool(Polynomial())
         False
-        >>> Polynomial(0, 1).is_zero()
+        >>> bool(Polynomial(0))
         False
+        >>> bool(Polynomial(0, 0))
+        False
+        >>> bool(Polynomial(1))
+        True
+        >>> bool(Polynomial(0, 1))
+        True
         """
         if len(self.a) == 0:
-            return True
-        return False
+            return False
+        return True
 
     def diff(self):
         """
@@ -286,7 +336,13 @@ class Polynomial:
         4
         >>> Polynomial(1, 0, 0, 0)(2)
         8
+        >>> Polynomial(3, 2, 1)(Polynomial(2, 1))
+        Polynomial([6.0, 16.0, 12.0])
         """
+        if isinstance(x, Polynomial):
+            out = Polynomial()
+            for a in reversed(self.a):
+                out = a + x * out
         out = 0
         for a in reversed(self.a):
             out = a + x * out
@@ -307,7 +363,21 @@ def mul_poly(poly1, poly2):
     return (to_polynomial(poly1) * to_polynomial(poly2)).to_list()
 
 def is_zero(poly):
-    return to_polynomial(poly).is_zero()
+    """
+    >>> is_zero([])
+    True
+    >>> is_zero([0])
+    True
+    >>> is_zero([0, 0])
+    True
+    >>> is_zero([0, 1])
+    False
+    >>> is_zero([1, 0])
+    False
+    >>> is_zero([1])
+    False
+    """
+    return not to_polynomial(poly)
 
 def cmp_poly(poly1, poly2):
     return to_polynomial(poly1) == to_polynomial(poly2)
@@ -317,9 +387,11 @@ def eval_poly(poly, x):
 
 def combine_poly(poly1, poly2): pass
 
-def pow_poly(poly, n): pass
+def pow_poly(poly, n):
+    return (to_polynomial(poly) ** n).to_list()
 
-def diff_poly(poly): pass
+def diff_poly(poly):
+    return to_polynomial(poly).diff().to_list()
 
 if __name__ == '__main__':
     # testy
