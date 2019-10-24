@@ -44,4 +44,4 @@ if __name__ == '__main__':
     doctest.testmod()
 
     liczba = get_number()
-    print(f'{liczba}ty wyraz ciągu Fibonacciego to {fibonacci(liczba)}')
+    print(f'{liczba}. wyraz ciągu Fibonacciego to {fibonacci(liczba)}')
