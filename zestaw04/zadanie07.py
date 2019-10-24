@@ -1,15 +1,33 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+zadanie 4.7
+"""
 
-def flatten(sequence):
+def flatten_recursive(sequence):
+    """
+    Returns flattened sequence - recursive version
+    >>> flatten_recursive([1, [2, [3]]])
+    [1, 2, 3]
+    >>> flatten_recursive([])
+    []
+    """
     out = []
     for i in sequence:
         if isinstance(i, (list, tuple)):
-            out += flatten(i)
+            out += flatten_recursive(i)
         else:
             out.append(i)
     return out
 
-def better_flatten(sequence):
+def flatten(sequence):
+    """
+    Returns flattened sequence
+    >>> flatten([1, [2, [3]]])
+    [1, 2, 3]
+    >>> flatten([])
+    []
+    """
     out = []
     stack = [sequence]
     while len(stack):
@@ -21,7 +39,12 @@ def better_flatten(sequence):
     out.reverse()
     return out
 
-seq = [1,(2,3),[],[4,(5,6,7)],8,[9]]
-# [1,2,3,4,5,6,7,8,9]
-print(flatten(seq))
-print(better_flatten(seq))
+if __name__ == '__main__':
+    # testy
+    import doctest
+    doctest.testmod()
+
+    seq = [1,(2,3),[],[4,(5,6,7)],8,[9]]
+    # [1,2,3,4,5,6,7,8,9]
+    print(f'{seq} => {flatten(seq)}')
+    print(f'{seq} => {flatten_recursive(seq)}')
