@@ -21,12 +21,13 @@ class Node:
         return f'Node({self.data})'
 
 class SortedList:
-    def __init__(self, *list):
+    def __init__(self, *list, debug=False):
         """
         Construct SortedList.
         """
         self.head = None
         self.len = len(list)
+        self.debug = debug
         for x in sorted(list, reverse=False):
             self.head = Node(x, next=self.head)
 
@@ -79,6 +80,14 @@ class SortedList:
         >>> SortedList(6, 5)
         SortedList(6, 5)
         """
+        if self.debug:
+            tmp = self.head
+            out = ''
+            while tmp is not None:
+                out += hex(id(tmp)) + ': ' + repr(tmp) + ' -> '
+                tmp = tmp.next
+            return out
+
         out = 'SortedList('
         tmp = self.head
         if tmp:
@@ -299,3 +308,12 @@ class SortedList:
 if __name__ == '__main__':
     import doctest
     doctest.testmod()
+
+    for i in [2, 4, 6]:
+        x = SortedList(5, 3, debug=True)
+        print('x: ' + repr(x))
+        y = SortedList(i, debug=True)
+        print('y: ' + repr(y))
+        x.merge(y)
+        print(repr(x))
+        print()
