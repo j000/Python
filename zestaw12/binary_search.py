@@ -23,13 +23,15 @@ def binarne_rek(L, left, right, y):
         return binarne_rek(L, index + 1, right - 1, y)
 
 if __name__ == '__main__':
-    for i in range(100, 303):
-        print(f'{i}: ', end='')
-        for N in range(1, i):
-            lista = list(range(N))
-            for i in range(N):
-                if binarne_rek(lista, 0, len(lista) - 1, i) != i:
-                    print(lista)
-                    print(f'binarne_rek(lista, 0, {len(lista) - 1}, {i}) == {binarne_rek(lista, 0, len(lista) - 1, i)}')
-                    quit(1)
-        print(' ok!')
+    for N in range(1, 302):
+        lista = list(range(N))
+        for i in range(N):
+            if binarne_rek(lista, 0, len(lista) - 1, i) != i:
+                print(lista)
+                print(f'binarne_rek(lista, 0, {len(lista) - 1}, {i}) == {binarne_rek(lista, 0, len(lista) - 1, i)}')
+                quit(1)
+        for i in [-1, N, N // 2 + 0.5]:
+            if binarne_rek(lista, 0, len(lista) - 1, i) != None:
+                print(lista)
+                print(f'binarne_rek(lista, 0, {len(lista) - 1}, {i}) == {binarne_rek(lista, 0, len(lista) - 1, i)}')
+                quit(1)
