@@ -127,7 +127,7 @@ class SortedList:
         >>> len(x)
         3
         """
-        if not node is Node: # SortedList().insert(5)
+        if not isinstance(node, Node): # SortedList().insert(5)
             node = Node(node)
         else: # just in case
             node.next = None
@@ -227,33 +227,29 @@ class SortedList:
         SortedList(2, 1)
         >>> SortedList(2).merge(SortedList(1))
         SortedList(2, 1)
+        >>> SortedList(5, 3, 1).merge(SortedList(6, 4, 2))
+        SortedList(6, 5, 4, 3, 2, 1)
+        >>> SortedList(6, 4, 2).merge(SortedList(5, 3, 1))
+        SortedList(6, 5, 4, 3, 2, 1)
+        >>> SortedList(6, 4).merge(SortedList(5, 3, 2, 1))
+        SortedList(6, 5, 4, 3, 2, 1)
+        >>> SortedList(6, 4).merge(SortedList(5, 3, 2, 1))
+        SortedList(6, 5, 4, 3, 2, 1)
+        >>> SortedList(4, 3, 2).merge(SortedList(1))
+        SortedList(4, 3, 2, 1)
+        >>> SortedList(1).merge(SortedList(4, 3, 2))
+        SortedList(4, 3, 2, 1)
+        >>> SortedList(3, 2, 1).merge(SortedList(4))
+        SortedList(4, 3, 2, 1)
+        >>> SortedList(4).merge(SortedList(3, 2, 1))
+        SortedList(4, 3, 2, 1)
         >>> import itertools
-        >>> for perm in itertools.permutations([1, 2, 3, 4]):
-        ...     SortedList(*perm[:2]).merge(SortedList(*perm[2:]))
-        SortedList(4, 3, 2, 1)
-        SortedList(4, 3, 2, 1)
-        SortedList(4, 3, 2, 1)
-        SortedList(4, 3, 2, 1)
-        SortedList(4, 3, 2, 1)
-        SortedList(4, 3, 2, 1)
-        SortedList(4, 3, 2, 1)
-        SortedList(4, 3, 2, 1)
-        SortedList(4, 3, 2, 1)
-        SortedList(4, 3, 2, 1)
-        SortedList(4, 3, 2, 1)
-        SortedList(4, 3, 2, 1)
-        SortedList(4, 3, 2, 1)
-        SortedList(4, 3, 2, 1)
-        SortedList(4, 3, 2, 1)
-        SortedList(4, 3, 2, 1)
-        SortedList(4, 3, 2, 1)
-        SortedList(4, 3, 2, 1)
-        SortedList(4, 3, 2, 1)
-        SortedList(4, 3, 2, 1)
-        SortedList(4, 3, 2, 1)
-        SortedList(4, 3, 2, 1)
-        SortedList(4, 3, 2, 1)
-        SortedList(4, 3, 2, 1)
+        >>> N = 5
+        >>> x = SortedList(*list(reversed(range(N))))
+        >>> for perm in itertools.permutations(range(N)):
+        ...     for i in range(0, N+1):
+        ...         if (str(SortedList(*perm[:i]).merge(SortedList(*perm[i:]))) != str(x)):
+        ...             print(f'{perm[:i]} + {perm[i:]} != {x}')
         """
         if other.is_empty():
             return self
