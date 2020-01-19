@@ -11,6 +11,7 @@ class QuadTreeWindow(QtWidgets.QMainWindow):
     def __init__(self):
         self.root = QuadTree()
         self.radius = 0.5
+        self.searching = None
 
         self.app = QtWidgets.QApplication(sys.argv)
         super().__init__()
@@ -40,6 +41,7 @@ class QuadTreeWindow(QtWidgets.QMainWindow):
             geometry = self.geometry()
             width, height = geometry.width(), geometry.height()
             pos = event.pos()
+            self.searching = pos
             self.root.search(
                 Point(pos.x() / width, pos.y() / height),
                 self.radius
@@ -49,6 +51,7 @@ class QuadTreeWindow(QtWidgets.QMainWindow):
 
     def mouseReleaseEvent(self, event):
         if event.button() == QtCore.Qt.RightButton:
+            self.searching = None
             self.root.unmark()
             self.update()
             event.accept()
@@ -111,6 +114,15 @@ class QuadTreeWindow(QtWidgets.QMainWindow):
             x *= geometry.width()
             y *= geometry.height()
             painter.drawPoint(x, y)
+
+        if self.searching is not None:
+            pen.setBrush(QtGui.QColor(255, 255, 255))
+            pen.setWidth(1)
+            painter.setPen(pen)
+            painter.drawEllipse(
+                self.searching,
+                self.radius,
+                self.radius)
 
 if __name__ == '__main__':
     QuadTreeWindow()
