@@ -99,7 +99,7 @@ class QuadTreeWindow(QtWidgets.QMainWindow):
             painter.drawRect(r)
             for i in tmp.children:
                 if isinstance(i, Point):
-                    points.append((i.x, i.y))
+                    points.append(i)
                     continue
                 if isinstance(i, QuadTreeNode):
                     stack.append(i)
@@ -110,7 +110,7 @@ class QuadTreeWindow(QtWidgets.QMainWindow):
         pen.setCapStyle(QtCore.Qt.RoundCap)
         painter.setPen(pen)
         for point in points:
-            x, y = point
+            x, y = point.x, point.y
             x *= geometry.width()
             y *= geometry.height()
             painter.drawPoint(x, y)
