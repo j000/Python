@@ -117,7 +117,7 @@ class QuadTreeWindow(QtWidgets.QMainWindow):
             y *= geometry.height()
             painter.drawPoint(x, y)
 
-        pen.setBrush(QtGui.QColor(255, 0, 0))
+        pen.setBrush(QtGui.QColor(255, 128, 128))
         painter.setPen(pen)
         for point in self.found:
             x, y = point.x, point.y
@@ -131,8 +131,8 @@ class QuadTreeWindow(QtWidgets.QMainWindow):
             painter.setPen(pen)
             painter.drawEllipse(
                 self.searching,
-                self.radius,
-                self.radius)
+                self.radius * geometry.width(),
+                self.radius * geometry.height())
 
 if __name__ == '__main__':
     QuadTreeWindow()

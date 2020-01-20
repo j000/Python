@@ -125,7 +125,6 @@ class QuadTree:
         radius *= radius
         while stack:
             current = stack.pop()
-            current.searched = True
             topLeft = current.center - current.halfDimension
             bottomRight = current.center + current.halfDimension
             if (topLeft.x > x3 
@@ -133,6 +132,7 @@ class QuadTree:
                 or bottomRight.x < x0
                 or bottomRight.y < y0):
                 continue
+            current.searched = True
             for element in current.children:
                 if (isinstance(element, Point)
                     and ((element.x - position.x) ** 2
