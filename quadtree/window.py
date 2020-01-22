@@ -8,9 +8,17 @@ from quadtree import QuadTree, QuadTreeNode
 from point import Point
 
 class QuadTreeWindow(QtWidgets.QMainWindow):
+    background = QtGui.QColor(27, 52, 108)
+    normal = QtGui.QColor(1, 171, 233, 32)
+    points = QtGui.QColor(1, 171, 233)
+    fill = QtGui.QColor(195, 206, 208, 8)
+    foundpoints = QtGui.QColor(245, 75, 26)
+    searched = QtGui.QColor(245, 75, 26, 64)
+    searchring = QtGui.QColor(229, 195, 158)
+
     def __init__(self):
         self.root = QuadTree()
-        self.radius = 0.5
+        self.radius = 0.125
         self.searching = None
         self.found = []
 
@@ -19,7 +27,7 @@ class QuadTreeWindow(QtWidgets.QMainWindow):
 
         self.app.setStyle("Fusion")
         palette = QtGui.QPalette()
-        palette.setColor(QtGui.QPalette.Window, QtGui.QColor(20, 20, 20))
+        palette.setColor(QtGui.QPalette.Window, self.background)
         self.app.setPalette(palette)
 
         self.setWindowTitle('QuadTree')
@@ -29,12 +37,21 @@ class QuadTreeWindow(QtWidgets.QMainWindow):
         sys.exit(self.app.exec_())
 
     def keyPressEvent(self, event):
+        from random import randint
         if event.key() == QtCore.Qt.Key_Q:
             self.app.quit()
         elif event.key() == QtCore.Qt.Key_A:
             self.radius *= 9 / 8
         elif event.key() == QtCore.Qt.Key_Z:
             self.radius *= 7 / 8
+        elif event.key() == QtCore.Qt.Key_Space:
+            width, height = self.geometry().width(), self.geometry().height()
+            for _ in range(150):
+                self.root.insert(Point(
+                    randint(0, width) / width,
+                    randint(0, height) / height
+                ))
+            self.update()
         event.accept()
 
     def mousePressEvent(self, event):
@@ -77,8 +94,6 @@ class QuadTreeWindow(QtWidgets.QMainWindow):
 
         pen = QtGui.QPen()
         pen.setWidth(1)
-        pen.setBrush(QtGui.QColor(128, 255, 128))
-        painter.setPen(pen)
         
         points = []
         stack = deque()
@@ -92,11 +107,10 @@ class QuadTreeWindow(QtWidgets.QMainWindow):
                 2 * tmp.halfDimension * geometry.height()
             )
             if tmp.searched:
-                pen.setBrush(QtGui.QColor(255, 0, 0))
-                # painter.fillRect(r, QtGui.QColor(255, 0, 0, 8))
+                pen.setBrush(self.searched)
             else:
-                pen.setBrush(QtGui.QColor(128, 255, 128))
-            painter.fillRect(r, QtGui.QColor(0, 255, 0, 8))
+                pen.setBrush(self.normal)
+            painter.fillRect(r, self.fill)
             painter.setPen(pen)
             painter.drawRect(r)
             for i in tmp.children:
@@ -107,7 +121,7 @@ class QuadTreeWindow(QtWidgets.QMainWindow):
                     stack.append(i)
                     continue
 
-        pen.setBrush(QtGui.QColor(192, 255, 64))
+        pen.setBrush(self.points)
         pen.setWidth(4)
         pen.setCapStyle(QtCore.Qt.RoundCap)
         painter.setPen(pen)
@@ -117,7 +131,7 @@ class QuadTreeWindow(QtWidgets.QMainWindow):
             y *= geometry.height()
             painter.drawPoint(x, y)
 
-        pen.setBrush(QtGui.QColor(255, 128, 128))
+        pen.setBrush(self.foundpoints)
         painter.setPen(pen)
         for point in self.found:
             x, y = point.x, point.y
@@ -126,7 +140,7 @@ class QuadTreeWindow(QtWidgets.QMainWindow):
             painter.drawPoint(x, y)
 
         if self.searching is not None:
-            pen.setBrush(QtGui.QColor(255, 255, 255))
+            pen.setBrush(self.searchring)
             pen.setWidth(1)
             painter.setPen(pen)
             painter.drawEllipse(
