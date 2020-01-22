@@ -17,12 +17,18 @@ from collections import deque
 """
 class QuadTreeNode:
     def __init__(self, *, center=Point(0.5, 0.5), halfDimension=0.5):
+        """
+        Create new tree node.
+        """
         self.children = [None] * 4
         self.center = center
         self.halfDimension = halfDimension
         self.searched = False
 
     def get_quarter(self, element):
+        """
+        Selects quarter for element.
+        """
         bucket = 0
         if isinstance(element, Point):
             if element.x > self.center.x:
@@ -37,6 +43,9 @@ class QuadTreeNode:
         return bucket
 
     def new_child(self, bucket):
+        """
+        Creates new child node for given quarter.
+        """
         newHalfDimension = self.halfDimension / 2
         newCenter = self.center - newHalfDimension
         if bucket % 2:
@@ -48,9 +57,10 @@ class QuadTreeNode:
             halfDimension=newHalfDimension
         )
 
-    ########################################
-
     def __str__(self):
+        """
+        Returns string representation.
+        """
         leftTop = self.center - self.halfDimension
         rightBottom = self.center + self.halfDimension
         return f'Node({str(leftTop.x)}-{str(rightBottom.x)}, {str(leftTop.y)}-{str(rightBottom.y)})'
@@ -83,10 +93,16 @@ class QuadTreeNode:
 
 class QuadTree:
     def __init__(self, n=0):
+        """
+        Create new tree.
+        """
         self.root = QuadTreeNode()
         self.insert_random(n)
 
     def insert_random(self, n=1):
+        """
+        Insert n points to tree.
+        """
         from random import random, randint, seed
         while n > 0:
             tmp = Point(
@@ -97,6 +113,9 @@ class QuadTree:
             n -= 1
 
     def insert(self, new_point):
+        """
+        Inserts point into tree.
+        """
         if not isinstance(new_point, Point):
             raise ValueError('Can only insert Points')
         current = self.root
@@ -116,6 +135,9 @@ class QuadTree:
             current = current.children[bucket]
 
     def search(self, position, radius):
+        """
+        Returns list of points lying in the given circle.
+        """
         results = []
         stack = deque([self.root])
         x0 = position.x - radius
@@ -127,7 +149,7 @@ class QuadTree:
             current = stack.pop()
             topLeft = current.center - current.halfDimension
             bottomRight = current.center + current.halfDimension
-            if (topLeft.x > x3 
+            if (topLeft.x > x3
                 or topLeft.y > y3
                 or bottomRight.x < x0
                 or bottomRight.y < y0):
@@ -143,6 +165,9 @@ class QuadTree:
         return results
 
     def unmark(self):
+        """
+        Unchecks search flag.
+        """
         stack = deque([self.root])
         while stack:
             elem = stack.pop()
@@ -154,6 +179,9 @@ class QuadTree:
                     stack.appendleft(i)
 
     def print_tree(self):
+        """
+        Beautifully prints tree to the console.
+        """
         self.root.print_tree()
 
 ########################################
