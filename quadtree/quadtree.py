@@ -9,9 +9,11 @@ from point import Point
 from collections import deque
 
 """
-  ^
+QuadTreeNode class.
+Quarters:
+  ^ y
  2|3
---+->
+--+-> x
  0|1
   |
 """
@@ -66,6 +68,9 @@ class QuadTreeNode:
         return f'Node({str(leftTop.x)}-{str(rightBottom.x)}, {str(leftTop.y)}-{str(rightBottom.y)})'
 
     def print_tree(self, *, file=None, _prefix=[], _last=True):
+        """
+        Nicely prints tree to the console.
+        """
         empty = '   '
         indent = '│  '
         child = '├─ '
@@ -109,7 +114,7 @@ class QuadTree:
                 randint(0, 1024) / 1024,
                 randint(0, 1024) / 1024
             )
-            self.root.insert(tmp)
+            self.insert(tmp)
             n -= 1
 
     def insert(self, new_point):
