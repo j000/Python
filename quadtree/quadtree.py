@@ -8,16 +8,16 @@ Jarosław Rymut
 from point import Point
 from collections import deque
 
+class QuadTreeNode:
 """
 QuadTreeNode class.
-Quarters:
+Quadrants:
   ^ y
  2|3
 --+-> x
  0|1
   |
 """
-class QuadTreeNode:
     def __init__(self, *, center=Point(0.5, 0.5), halfDimension=0.5):
         """
         Create new tree node.
@@ -27,9 +27,9 @@ class QuadTreeNode:
         self.halfDimension = halfDimension
         self.searched = False
 
-    def get_quarter(self, element):
+    def get_quadrant(self, element):
         """
-        Selects quarter for element.
+        Selects quadrant for element.
         """
         bucket = 0
         if isinstance(element, Point):
@@ -46,7 +46,7 @@ class QuadTreeNode:
 
     def new_child(self, bucket):
         """
-        Creates new child node for given quarter.
+        Creates new child node for given quadrant.
         """
         newHalfDimension = self.halfDimension / 2
         newCenter = self.center - newHalfDimension
@@ -58,6 +58,19 @@ class QuadTreeNode:
             center=newCenter,
             halfDimension=newHalfDimension
         )
+
+    def is_inside(self, point):
+        """
+        Checks if point is inside quadrant.
+        """
+        bottomLeft = current.center - current.halfDimension
+        topRight = current.center + current.halfDimension
+        if (bottomLeft.x < point.x or
+            bottomLeft.y < point.y or
+            topRight.x > point.x or
+            topRight.y > point.y):
+            return False
+        return True
 
     def __str__(self):
         """
@@ -97,6 +110,10 @@ class QuadTreeNode:
 ########################################
 
 class QuadTree:
+    """
+    QuadTree class.
+    Main quadtree class that manages quadtree.
+    """
     def __init__(self, n=0):
         """
         Create new tree.
@@ -109,10 +126,11 @@ class QuadTree:
         Insert n points to tree.
         """
         from random import random, randint, seed
+        x = 2 ** 20
         while n > 0:
             tmp = Point(
-                randint(0, 1024) / 1024,
-                randint(0, 1024) / 1024
+                randint(0, x) / x,
+                randint(0, x) / x
             )
             self.insert(tmp)
             n -= 1
@@ -125,7 +143,7 @@ class QuadTree:
             raise ValueError('Can only insert Points')
         current = self.root
         while True:
-            bucket = current.get_quarter(new_point)
+            bucket = current.get_quadrant(new_point)
             if (isinstance(current.children[bucket], Point)
                 and current.children[bucket] == new_point):
                 return
@@ -135,7 +153,7 @@ class QuadTree:
             if isinstance(current.children[bucket], Point):
                 point = current.children[bucket]
                 node = current.new_child(bucket)
-                node.children[node.get_quarter(point)] = point
+                node.children[node.get_quadrant(point)] = point
                 current.children[bucket] = node
             current = current.children[bucket]
 
@@ -152,12 +170,12 @@ class QuadTree:
         radius *= radius
         while stack:
             current = stack.pop()
-            topLeft = current.center - current.halfDimension
-            bottomRight = current.center + current.halfDimension
-            if (topLeft.x > x3
-                or topLeft.y > y3
-                or bottomRight.x < x0
-                or bottomRight.y < y0):
+            bottomLeft = current.center - current.halfDimension
+            topRight = current.center + current.halfDimension
+            if (bottomLeft.x > x3
+                or bottomLeft.y > y3
+                or topRight.x < x0
+                or topRight.y < y0):
                 continue
             current.searched = True
             for element in current.children:
@@ -195,14 +213,17 @@ if __name__ == '__main__':
     from random import seed, randint
     x = QuadTree()
     # seed(7)
-    for i in range(2500):
-        tmp = Point(
-            randint(0, 1024) / 1024,
-            randint(0, 1024) / 1024
-        )
-        # print('Inserting', tmp)
-        x.insert(tmp)
-    x.print_tree()
-    print(len(x.search(Point(0.5, 0.5), 1.5)))
-    print(len(x.search(Point(0.9, 0.9), 0.17)))
-    print(len(x.search(Point(0.3, 0.3), 0.05)))
+    x.insert_random(25000)
+    print(len(x.search(Point(0.5, 0.5), 1.5))) # all points
+    print(len(x.search(Point(0.29, 0.29), 0.055)))
+    import timeit
+    print(timeit.timeit(
+        setup="""
+from point import Point
+from quadtree import QuadTree
+x=QuadTree()
+x.insert_random(25000)
+        """,
+        stmt="x.search(Point(0.29, 0.29), 0.055)",
+        number=5000
+    ) / 5000)

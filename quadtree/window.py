@@ -8,13 +8,17 @@ from quadtree import QuadTree, QuadTreeNode
 from point import Point
 
 class QuadTreeWindow(QtWidgets.QMainWindow):
+    """
+    QuadTreeWindow class.
+    Visualizes quadtree and allows mouse and keyboard operations.
+    """
     background = QtGui.QColor(27, 52, 108)
-    normal = QtGui.QColor(1, 171, 233, 32)
+    normal = QtGui.QColor(1, 171, 233, 128)
     points = QtGui.QColor(1, 171, 233)
-    fill = QtGui.QColor(195, 206, 208, 8)
+    fill = QtGui.QColor(195, 206, 208, 0)
     foundpoints = QtGui.QColor(245, 75, 26)
-    searched = QtGui.QColor(245, 75, 26, 64)
-    searchring = QtGui.QColor(229, 195, 158)
+    searched = QtGui.QColor(245, 75, 26, 128)
+    searchring = QtGui.QColor(229, 195, 158, 64)
 
     def __init__(self):
         self.root = QuadTree()
